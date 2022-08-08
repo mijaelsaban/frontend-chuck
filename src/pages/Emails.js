@@ -1,26 +1,32 @@
 import React, {Component} from "react";
 import axios from "axios"
+import InputEmail from "../components/InputEmail";
 
 class Emails extends Component {
-    state = {
-        email: '',
-        emails: [],
-        isLoaded: false
-    }
-
-    handleInput = (e) => {
-        this.setState({
-                [e.target.name]: e.target.value
-            }
-        )
+    constructor(props) {
+        super(props);
+        this.state = {
+            email: '',
+            emails: [],
+            isLoaded: false
+        }
     }
 
     async componentDidMount() {
         try {
-            await axios.get(process.env.REACT_APP_BACKEND_BASE_URL + '/api/emails')
-                .then(function (response) {
-                    this.setState.emails = response.data.emails
-                })
+            const token = localStorage.getItem("user_token");
+            if (token) {
+                const config = {
+                    headers: { Authorization: `Bearer ${token}` }
+                }
+                await axios.get(
+                    process.env.REACT_APP_BACKEND_BASE_URL + '/api/emails',
+                    config
+                ).then(response => {
+                        console.log(response);
+                        this.setState({isLoaded: true})
+                    })
+            }
         } catch (e) {
             console.log(e)
             //not authenticated
@@ -37,18 +43,7 @@ class Emails extends Component {
         return (
             <div>
                 <h2>Chuck Norris Mailer</h2>
-                <div className="card mt-5">
-                    <div className="card-body">
-                        <div className="card-title">Add an email to the list.</div>
-                        <div>
-                            <div className="form-outline mb-4">
-                                <input onChange={this.handleInput} name='email' value={this.state.email} type="email"
-                                       id="form2Example1" className="form-control"/>
-                                <label className="form-label" htmlFor="form2Example1">Email address</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <InputEmail/>
                 <div className="mt-5 card">
                     <div className="card-body">
                         <table className="table table-responsive">
@@ -57,6 +52,7 @@ class Emails extends Component {
                                 <th>Email</th>
                                 <th>Name</th>
                                 <th>Domain</th>
+                                <th>is Sent</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -65,8 +61,9 @@ class Emails extends Component {
                                 <td>mijael@ventury.com</td>
                                 <td>mijael</td>
                                 <td>sasdas</td>
+                                <td>No</td>
                                 <td>
-                                    <span className="btn btn-primary">Send</span>
+                                    <span className="btn btn-secondary">Send</span>
                                 </td>
                             </tr>
                             </tbody>
