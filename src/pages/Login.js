@@ -32,6 +32,9 @@ class Login extends Component
                 });
         } catch (e) {
             console.log(e)
+            if (e.code === "ERR_NETWORK") {
+                alert('Error. Please Check your internet connection.')
+            }
         }
     }
 
