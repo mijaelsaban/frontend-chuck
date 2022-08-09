@@ -35,6 +35,10 @@ class Login extends Component
             if (e.code === "ERR_NETWORK") {
                 alert('Error. Please Check your internet connection.')
             }
+
+            if (e.code === "ERR_BAD_RESPONSE") {
+                alert('Error. Please Check your database connection.')
+            }
         }
     }
 

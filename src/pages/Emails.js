@@ -8,13 +8,18 @@ class Emails extends Component {
         this.state = {
             email: '',
             emails: [],
-            isLoaded: false
+            isLoaded: false,
+            userName: '',
         }
     }
 
     async componentDidMount() {
         try {
             const token = localStorage.getItem("user_token");
+            const userName = localStorage.getItem("user_name");
+            this.setState({
+               userName: userName
+            });
             if (token) {
                 const config = {
                     headers: { Authorization: `Bearer ${token}` }
@@ -42,6 +47,7 @@ class Emails extends Component {
         }
         return (
             <div>
+                <h2>Welcome {this.state.userName.toUpperCase()} !</h2>
                 <h2>Chuck Norris Mailer</h2>
                 <InputEmail/>
                 <div className="mt-5 card">

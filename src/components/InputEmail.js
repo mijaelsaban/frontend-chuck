@@ -6,7 +6,9 @@ class InputEmail extends Component {
         super(props);
         this.state = {
             email: '',
-            errors: []
+            errors: {
+                email: ''
+            }
         }
     }
 
@@ -38,8 +40,12 @@ class InputEmail extends Component {
                     });
             }
         } catch (e) {
-            console.log(e.response.data.errors)
-            this.setState({errors: e.response.data.errors});
+            this.setState({errors: e.response.data.errors.email[0]});
+            this.setState({
+                errors: {
+                    email: e.response.data.errors.email[0]
+                }
+            })
         }
     }
 
@@ -57,11 +63,12 @@ class InputEmail extends Component {
                                            value={this.state.email}
                                            type="email"
                                            id="form2Example1"
-                                           className="form-control"/>
+                                           className={"form-control " + (this.state.errors.email.length > 1 ? "border border-danger" : '') }/>
                                     <label className="form-label"
                                            htmlFor="form2Example1">
                                         Email address
                                     </label>
+                                    <p className="text-danger">{this.state.errors.email}</p>
 
                                     <div className="invalid-feedback">
                                         Please input an email.
