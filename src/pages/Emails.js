@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import axios from "axios"
 import InputEmail from "../components/InputEmail";
+import login from "./Login";
 
 class Emails extends Component {
     constructor(props) {
@@ -15,27 +16,35 @@ class Emails extends Component {
 
     async componentDidMount() {
         try {
-            const token = localStorage.getItem("user_token");
             const userName = localStorage.getItem("user_name");
             this.setState({
-               userName: userName
+                userName: userName
             });
-            if (token) {
-                const config = {
-                    headers: { Authorization: `Bearer ${token}` }
-                }
-                await axios.get(
-                    process.env.REACT_APP_BACKEND_BASE_URL + '/api/emails',
-                    config
-                ).then(response => {
-                        console.log(response);
-                        this.setState({isLoaded: true})
-                    })
-            }
+            await this.handleFetch()
+
         } catch (e) {
             console.log(e)
             //not authenticated
-            window.location = '/'
+            // window.location = '/'
+        }
+    }
+
+    async handleFetch() {
+        console.log('fetching data')
+        const token = localStorage.getItem("user_token");
+        if (token) {
+            const config = {
+                headers: { Authorization: `Bearer ${token}` }
+            }
+            await axios.get(
+                process.env.REACT_APP_BACKEND_BASE_URL + '/api/emails',
+                config
+            ).then(response => {
+                console.log(response);
+                this.setState({isLoaded: true})
+                this.setState({emails: response.data})
+                console.log(this.state.emails)
+            })
         }
     }
 
@@ -49,29 +58,35 @@ class Emails extends Component {
             <div>
                 <h2>Welcome {this.state.userName.toUpperCase()} !</h2>
                 <h2>Chuck Norris Mailer</h2>
-                <InputEmail/>
+                <InputEmail onFetch={this.handleFetch}/>
                 <div className="mt-5 card">
                     <div className="card-body">
                         <table className="table table-responsive">
                             <thead>
                             <tr>
-                                <th>Email</th>
+                                <th>Email Id</th>
+                                <th>Value</th>
                                 <th>Name</th>
                                 <th>Domain</th>
-                                <th>is Sent</th>
+                                <th>Created</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>mijael@ventury.com</td>
-                                <td>mijael</td>
-                                <td>sasdas</td>
-                                <td>No</td>
-                                <td>
-                                    <span className="btn btn-secondary">Send</span>
-                                </td>
-                            </tr>
+                            {
+                                this.state.emails.data.map(function (email) {
+                                    return <tr key={email.id}>
+                                        <td>{email.id}</td>
+                                        <td>{email.value}</td>
+                                        <td>{email.name}</td>
+                                        <td>{email.domain}</td>
+                                        <td>{email.created_at}</td>
+                                        <td><button className="btn btn-secondary">Send</button></td>
+                                    </tr>
+
+                                })
+                            }
+
                             </tbody>
 
                         </table>

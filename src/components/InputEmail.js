@@ -12,6 +12,10 @@ class InputEmail extends Component {
         }
     }
 
+    handleFetch = () => {
+        this.props.onFetch();
+    }
+
     handleInput = (e) => {
         this.setState({
                 [e.target.name]: e.target.value
@@ -21,31 +25,41 @@ class InputEmail extends Component {
 
     handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const token = localStorage.getItem("user_token");
-            if (token) {
-                const config = {
-                    headers: {Authorization: `Bearer ${token}`}
-                }
-                await axios.post(
-                    process.env.REACT_APP_BACKEND_BASE_URL + '/api/emails',
-                    this.state,
-                    config
-                )
-                    .then(function (response) {
-                        const status = response.status;
-                        if (status === 200) {
-                            console.log(response.data.errors)
-                        }
-                    });
+        this.setState({
+            errors: {
+                email: ''
             }
+        })
+        try {
+            await this.storeEmail()
+            this.setState({
+                email: ''
+            })
+            this.handleFetch()
         } catch (e) {
+            console.log(e)
             this.setState({errors: e.response.data.errors.email[0]});
             this.setState({
                 errors: {
                     email: e.response.data.errors.email[0]
                 }
             })
+        }
+    }
+
+    async storeEmail () {
+        const token = localStorage.getItem("user_token");
+        if (token) {
+            const config = {
+                headers: {Authorization: `Bearer ${token}`}
+            }
+            await axios.post(
+                process.env.REACT_APP_BACKEND_BASE_URL + '/api/emails',
+                this.state,
+                config
+            ).then(function (response) {
+                console.log('child')
+            });
         }
     }
 
