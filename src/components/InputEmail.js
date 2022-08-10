@@ -58,7 +58,7 @@ class InputEmail extends Component {
                 this.state,
                 config
             ).then(function (response) {
-                console.log('child')
+                console.log('stored email')
             });
         }
     }

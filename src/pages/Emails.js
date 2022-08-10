@@ -14,7 +14,7 @@ class Emails extends Component {
         }
     }
 
-    async componentDidMount() {
+    async componentDidMount () {
         try {
             const userName = localStorage.getItem("user_name");
             this.setState({
@@ -23,24 +23,23 @@ class Emails extends Component {
             await this.handleFetch()
 
         } catch (e) {
-            console.log(e)
+            console.log('error ' + e)
             //not authenticated
-            // window.location = '/'
+            window.location = '/'
         }
     }
 
-    async handleFetch() {
+    handleFetch = () => {
         console.log('fetching data')
         const token = localStorage.getItem("user_token");
         if (token) {
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             }
-            await axios.get(
+            axios.get(
                 process.env.REACT_APP_BACKEND_BASE_URL + '/api/emails',
                 config
             ).then(response => {
-                console.log(response);
                 this.setState({isLoaded: true})
                 this.setState({emails: response.data})
                 console.log(this.state.emails)
@@ -81,7 +80,11 @@ class Emails extends Component {
                                         <td>{email.name}</td>
                                         <td>{email.domain}</td>
                                         <td>{email.created_at}</td>
-                                        <td><button className="btn btn-secondary">Send</button></td>
+                                        <td>
+                                            <button className="btn btn-secondary">
+                                                Send
+                                            </button>
+                                        </td>
                                     </tr>
 
                                 })
