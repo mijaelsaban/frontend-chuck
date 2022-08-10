@@ -47,6 +47,23 @@ class Emails extends Component {
         }
     }
 
+    handleSend = (id) => {
+        console.log(id)
+        console.log('sending email')
+        const token = localStorage.getItem("user_token");
+        if (token) {
+            const config = {
+                headers: { Authorization: `Bearer ${token}` }
+            }
+            axios.post(
+                process.env.REACT_APP_BACKEND_BASE_URL + '/api/messages/' + id,
+                config
+            ).then(response => {
+                console.log(response)
+            })
+        }
+    }
+
     render() {
         if (!this.state.isLoaded) {
             return (
@@ -73,7 +90,7 @@ class Emails extends Component {
                             </thead>
                             <tbody>
                             {
-                                this.state.emails.data.map(function (email) {
+                                this.state.emails.data.map((email) => {
                                     return <tr key={email.id}>
                                         <td>{email.id}</td>
                                         <td>{email.value}</td>
@@ -81,7 +98,7 @@ class Emails extends Component {
                                         <td>{email.domain}</td>
                                         <td>{email.created_at}</td>
                                         <td>
-                                            <button className="btn btn-secondary">
+                                            <button onClick={ () => this.handleSend(email.id) } className="btn btn-secondary">
                                                 Send
                                             </button>
                                         </td>
