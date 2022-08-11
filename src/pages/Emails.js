@@ -62,12 +62,12 @@ class Emails extends Component {
         console.log('sending email')
         const token = localStorage.getItem("user_token");
         if (token) {
-            const config = {
-                headers: { Authorization: `Bearer ${token}` }
-            }
-            axios.post(
-                process.env.REACT_APP_BACKEND_BASE_URL + '/api/messages/' + id,
-                config
+            axios.put(
+                process.env.REACT_APP_BACKEND_BASE_URL + '/api/emails/' + id,
+                '',
+                {
+                        headers: { Authorization: `Bearer ${token}` }
+                      }
             ).then(response => {
                 console.log(response)
             })
@@ -97,7 +97,7 @@ class Emails extends Component {
                         <table className="table-responsive">
                             <thead>
                             <tr>
-                                <th>Email Id</th>
+                                <th>Id</th>
                                 <th>Value</th>
                                 <th>Name</th>
                                 <th>Domain</th>
