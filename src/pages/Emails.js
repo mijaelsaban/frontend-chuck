@@ -9,8 +9,9 @@ class Emails extends Component {
         this.state = {
             email: '',
             emails: [],
-            isLoaded: false,
             userName: '',
+            isLoaded: false,
+            showSuccess: false,
         }
     }
 
@@ -27,6 +28,15 @@ class Emails extends Component {
             //not authenticated
             window.location = '/'
         }
+    }
+
+    handleOnShowSuccess = () => {
+        this.setState({showSuccess: true})
+    }
+
+    handleHideSuccess = () => {
+        console.log('sdasdasd')
+        this.setState({showSuccess: false})
     }
 
     handleFetch = () => {
@@ -72,12 +82,19 @@ class Emails extends Component {
         }
         return (
             <div>
+                { this.state.showSuccess === true ?
+                    <div className="d-flex justify-content-between alert alert-success">
+                        <div>Success</div>
+                        <div className="icon-close-success" onClick={this.handleHideSuccess}>x</div>
+                    </div>
+                    : ''
+                }
                 <h2>Welcome {this.state.userName.toUpperCase()} !</h2>
                 <h2>Chuck Norris Mailer</h2>
-                <InputEmail onFetch={this.handleFetch}/>
+                <InputEmail onFetch={this.handleFetch} onShowSuccess={this.handleOnShowSuccess}/>
                 <div className="mt-5 card">
                     <div className="card-body">
-                        <table className="table table-responsive">
+                        <table className="table-responsive">
                             <thead>
                             <tr>
                                 <th>Email Id</th>

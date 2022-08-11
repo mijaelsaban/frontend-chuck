@@ -16,6 +16,10 @@ class InputEmail extends Component {
         this.props.onFetch();
     }
 
+    handleOnShowSuccess = () => {
+        this.props.onShowSuccess();
+    }
+
     handleInput = (e) => {
         this.setState({
                 [e.target.name]: e.target.value
@@ -35,9 +39,10 @@ class InputEmail extends Component {
             this.setState({
                 email: ''
             })
-            this.handleFetch()
+            this.handleOnShowSuccess()
         } catch (e) {
             console.log(e)
+            this.handleShowSuccess()
             this.setState({errors: e.response.data.errors.email[0]});
             this.setState({
                 errors: {
