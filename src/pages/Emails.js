@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import axios from "axios"
 import InputEmail from "../components/InputEmail";
-import login from "./Login";
+import TableHeader from "../components/TableHeader";
 
 class Emails extends Component {
     constructor(props) {
@@ -12,10 +12,18 @@ class Emails extends Component {
             userName: '',
             isLoaded: false,
             showSuccess: false,
+            sortingDesc: true,
+            defaultColumns: [
+                {name: 'id', sortDirection: false},
+                {name: 'email', sortDirection: false},
+                {name: 'name', sortDirection: 'desc'},
+                {name: 'domain', sortDirection: false},
+                {name: 'action', sortDirection: false}
+            ]
         }
     }
 
-    async componentDidMount () {
+    async componentDidMount() {
         try {
             const userName = localStorage.getItem("user_name");
             this.setState({
@@ -35,7 +43,6 @@ class Emails extends Component {
     }
 
     handleHideSuccess = () => {
-        console.log('sdasdasd')
         this.setState({showSuccess: false})
     }
 
@@ -44,7 +51,7 @@ class Emails extends Component {
         const token = localStorage.getItem("user_token");
         if (token) {
             const config = {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: {Authorization: `Bearer ${token}`}
             }
             axios.get(
                 process.env.REACT_APP_BACKEND_BASE_URL + '/api/emails',
@@ -66,12 +73,37 @@ class Emails extends Component {
                 process.env.REACT_APP_BACKEND_BASE_URL + '/api/emails/' + id,
                 '',
                 {
-                        headers: { Authorization: `Bearer ${token}` }
-                      }
+                    headers: {Authorization: `Bearer ${token}`}
+                }
             ).then(response => {
                 console.log(response)
             })
         }
+    }
+
+    handleSortDesc = (columnName, sortDirection) => {
+        // console.log(this.state.defaultColumns)
+        // this.state.defaultColumns.map(column => {
+        //     if (column.name === columnName) {
+        //         // column.sortDirection === 'desc' ? 'asc' : 'desc';
+        //         // this.setState(prevState => ({
+        //         //     sortDesc: !prevState.sortDesc
+        //         // }));
+        //
+        //     }
+        // })
+        this.setState(prevState => ({
+                defaultColumns: prevState.defaultColumns.map((column) => {
+                        return column.name === 'name' ?
+                            Object.assign(
+                                column, {sortDirection: column.sortDirection === 'desc' ? 'asc' : 'desc'}
+                            )
+                            : column
+                    }
+                )
+            })
+        );
+        console.log(this.state.defaultColumns)
     }
 
     render() {
@@ -82,8 +114,8 @@ class Emails extends Component {
         }
         return (
             <div>
-                { this.state.showSuccess === true ?
-                    <div className="d-flex justify-content-between alert alert-success">
+                {this.state.showSuccess === true ?
+                    <div className="float-end w-50 alert alert-success d-flex justify-content-between">
                         <div>Success</div>
                         <div className="icon-close-success" onClick={this.handleHideSuccess}>x</div>
                     </div>
@@ -91,18 +123,25 @@ class Emails extends Component {
                 }
                 <h2>Welcome {this.state.userName.toUpperCase()} !</h2>
                 <h2>Chuck Norris Mailer</h2>
-                <InputEmail onFetch={this.handleFetch} onShowSuccess={this.handleOnShowSuccess}/>
+                <InputEmail
+                    onFetch={this.handleFetch}
+                    onShowSuccess={this.handleOnShowSuccess}
+                />
                 <div className="mt-5 card">
                     <div className="card-body">
-                        <table className="table-responsive">
+                        <table className="table">
                             <thead>
                             <tr>
-                                <th>Id</th>
-                                <th>Value</th>
-                                <th>Name</th>
-                                <th>Domain</th>
-                                <th>Created</th>
-                                <th>Action</th>
+                                {
+                                    this.state.defaultColumns.map((column) => (
+                                        <TableHeader
+                                            key={column.name}
+                                            value={column.name}
+                                            sortDirection={column.sortDirection}
+                                            onHeaderClick={this.handleSortDesc}
+                                        />
+                                    ))
+                                }
                             </tr>
                             </thead>
                             <tbody>
@@ -113,9 +152,9 @@ class Emails extends Component {
                                         <td>{email.value}</td>
                                         <td>{email.name}</td>
                                         <td>{email.domain}</td>
-                                        <td>{email.created_at}</td>
                                         <td>
-                                            <button onClick={ () => this.handleSend(email.id) } className="btn btn-secondary">
+                                            <button onClick={() => this.handleSend(email.id)}
+                                                    className="btn btn-secondary">
                                                 Send
                                             </button>
                                         </td>
@@ -123,9 +162,7 @@ class Emails extends Component {
 
                                 })
                             }
-
                             </tbody>
-
                         </table>
                     </div>
                 </div>

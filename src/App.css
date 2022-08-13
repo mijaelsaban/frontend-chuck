@@ -3,7 +3,6 @@
 }
 
 .App-logo {
-  height: 40vmin;
   pointer-events: none;
 }
 
@@ -38,5 +37,21 @@
 }
 
 .icon-close-success {
+  cursor: pointer;
+}
+
+.icons-ml {
+  margin-left: 8px;
+}
+
+span > i {
+  color: lightgray;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+span > i:hover  {
+  color: blue;
+  font-weight: bold;
   cursor: pointer;
 }

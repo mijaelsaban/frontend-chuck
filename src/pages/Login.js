@@ -46,7 +46,7 @@ class Login extends Component
         return (
             <div className="container py-5">
                 <div className="text-center py-2">
-                    <img src={logo} className="w-25" alt="logo"/>
+                    <img src={logo} className="w-25 App-logo" alt="logo"/>
                 </div>
                 <form onSubmit={this.handleLogin}>
                     <div className="form-outline mb-4">
