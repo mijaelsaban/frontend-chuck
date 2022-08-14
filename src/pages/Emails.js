@@ -122,13 +122,13 @@ class Emails extends Component {
                         : ''
                     }
                     <h2>Welcome {this.state.userName.toUpperCase()} !</h2>
-                    <h2>Chuck Norris Mailer</h2>
+                    <h2>This is the Chuck Norris Mailer</h2>
                     <InputEmail
                         onFetch={this.handleFetch}
                         onShowSuccess={this.handleOnShowSuccess}
                     />
                     <div className="mt-5 card">
-                        <div className="card-body">
+                        <div className="card-body overflow-auto">
                             <table className="table">
                                 <thead>
                                 <tr>

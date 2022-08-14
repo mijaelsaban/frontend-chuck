@@ -58,7 +58,7 @@ span > i:hover  {
 
 .alert-success-notification {
   z-index: 10;
-  transition: all .25s;
+  transition: all 5s;
   right: 20px;
   cursor: pointer;
 }
