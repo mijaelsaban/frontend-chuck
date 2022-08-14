@@ -16,7 +16,7 @@ class Emails extends Component {
             sortingDesc: true,
             defaultColumns: [
                 {name: 'id', sortDirection: false},
-                {name: 'email', sortDirection: false},
+                {name: 'value', sortDirection: false},
                 {name: 'name', sortDirection: 'desc'},
                 {name: 'domain', sortDirection: false},
                 {name: 'action', sortDirection: false}
@@ -47,7 +47,7 @@ class Emails extends Component {
         this.setState({showSuccess: false})
     }
 
-    handleFetch = () => {
+    handleFetch = (queryString='') => {
         console.log('fetching data')
         const token = localStorage.getItem("user_token");
         if (token) {
@@ -55,7 +55,7 @@ class Emails extends Component {
                 headers: {Authorization: `Bearer ${token}`}
             }
             axios.get(
-                process.env.REACT_APP_BACKEND_BASE_URL + '/api/emails',
+                process.env.REACT_APP_BACKEND_BASE_URL + '/api/emails?' + queryString,
                 config
             ).then(response => {
                 this.setState({isLoaded: true})
@@ -85,11 +85,13 @@ class Emails extends Component {
     handleSortDesc = (columnName) => {
         this.setState(prevState => ({
             defaultColumns: prevState.defaultColumns
-                .map(function (each) {
+                .map((each) => {
                     if (columnName === each.name) {
                         if (each.sortDirection === 'desc') {
+                            this.handleFetch('sort[' + columnName + ']=asc')
                             return {...each, sortDirection: 'asc'}
                         } else {
+                            this.handleFetch('sort[' + columnName + ']=desc')
                             return {...each, sortDirection: 'desc'}
                         }
                     } else {
