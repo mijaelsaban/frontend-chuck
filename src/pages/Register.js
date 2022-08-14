@@ -1,15 +1,15 @@
 import React, { Component, useState } from "react";
 import logo from './../logo.svg';
 import axios from 'axios'
-import {Link} from "react-router-dom";
-import Register from "./Register";
 
 
 class Login extends Component
 {
     state = {
-      email: '',
-      password: ''
+        name: '',
+        email: '',
+        password: '',
+        password_confirmation: ''
     };
 
     handleInput = (e) => {
@@ -22,7 +22,7 @@ class Login extends Component
     handleLogin = async (e) => {
         e.preventDefault();
         try {
-            await axios.post(process.env.REACT_APP_BACKEND_BASE_URL + '/login', this.state)
+            await axios.post(process.env.REACT_APP_BACKEND_BASE_URL + '/register', this.state)
                 .then(function (response) {
                     const status = response.status;
                     if (status === 200) {
@@ -48,18 +48,28 @@ class Login extends Component
         return (
             <div className="container py-5">
                 <div className="text-center py-2">
-                    <h1>Login</h1>
+                    <h1>Register</h1>
                     <img src={logo} className="w-25 App-logo" alt="logo"/>
                 </div>
                 <form onSubmit={this.handleLogin}>
                     <div className="form-outline mb-4">
-                        <input onChange={this.handleInput} name='email' value={this.state.email} type="email" id="form2Example1" className="form-control"/>
+                        <input onChange={this.handleInput} name='name' value={this.state.name} type="text" id="name" className="form-control"/>
+                        <label className="form-label" htmlFor="form2Example1">Name</label>
+                    </div>
+
+                    <div className="form-outline mb-4">
+                        <input onChange={this.handleInput} name='email' value={this.state.email} type="email" id="email" className="form-control"/>
                         <label className="form-label" htmlFor="form2Example1">Email address</label>
                     </div>
 
                     <div className="form-outline mb-4">
-                        <input onChange={this.handleInput} name='password' value={this.state.password} type="password" id="form2Example2" className="form-control"/>
+                        <input onChange={this.handleInput} name='password' value={this.state.password} type="password" id="password" className="form-control"/>
                         <label className="form-label" htmlFor="form2Example2">Password</label>
+                    </div>
+
+                    <div className="form-outline mb-4">
+                        <input onChange={this.handleInput} name='password_confirmation' value={this.state.password_confirmation} type="password" id="password_confirmation" className="form-control"/>
+                        <label className="form-label" htmlFor="form2Example2">Password Confirmation</label>
                     </div>
 
                     <div className="row mb-4">
@@ -67,11 +77,7 @@ class Login extends Component
                         </div>
                     </div>
 
-                    <button type="submit" className="btn btn-primary btn-block mb-4">Sign in</button>
-
-                    <div className="text-center">
-                        <p>Not a member? <Link to={"Register"}>Register</Link></p>
-                    </div>
+                    <button type="submit" className="btn btn-primary btn-block mb-4">Register</button>
                 </form>
             </div>
         );
