@@ -77,6 +77,7 @@ class Emails extends Component {
                     headers: {Authorization: `Bearer ${token}`}
                 }
             ).then(response => {
+                this.handleOnShowSuccess()
                 console.log(response)
             })
         }
@@ -110,10 +111,13 @@ class Emails extends Component {
             }
             return (
                 <div>
-                    {this.state.showSuccess === true ?
-                        <div className="float-end w-50 alert alert-success d-flex justify-content-between">
+                    {this.state.showSuccess === false ?
+                        <div className="alert alert-secondary position-fixed
+                        z-50 d-flex justify-content-between w-50
+                        alert-success-notification"
+                             onClick={this.handleHideSuccess}>
                             <div>Success</div>
-                            <div className="icon-close-success" onClick={this.handleHideSuccess}>x</div>
+                            <span className="icon-close-success">x</span>
                         </div>
                         : ''
                     }
