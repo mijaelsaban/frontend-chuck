@@ -111,7 +111,7 @@ class Emails extends Component {
             }
             return (
                 <div>
-                    {this.state.showSuccess === false ?
+                    {this.state.showSuccess === true ?
                         <div className="alert alert-secondary position-fixed
                         z-50 d-flex justify-content-between w-50
                         alert-success-notification"

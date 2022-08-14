@@ -60,5 +60,5 @@ span > i:hover  {
   z-index: 10;
   transition: all .25s;
   right: 20px;
-
+  cursor: pointer;
 }
