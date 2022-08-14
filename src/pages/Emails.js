@@ -3,6 +3,7 @@ import axios from "axios"
 import InputEmail from "../components/InputEmail";
 import TableHeader from "../components/TableHeader";
 
+
 class Emails extends Component {
     constructor(props) {
         super(props);
@@ -81,94 +82,89 @@ class Emails extends Component {
         }
     }
 
-    handleSortDesc = (columnName, sortDirection) => {
-        // console.log(this.state.defaultColumns)
-        // this.state.defaultColumns.map(column => {
-        //     if (column.name === columnName) {
-        //         // column.sortDirection === 'desc' ? 'asc' : 'desc';
-        //         // this.setState(prevState => ({
-        //         //     sortDesc: !prevState.sortDesc
-        //         // }));
-        //
-        //     }
-        // })
+    handleSortDesc = (columnName) => {
         this.setState(prevState => ({
-                defaultColumns: prevState.defaultColumns.map((column) => {
-                        return column.name === 'name' ?
-                            Object.assign(
-                                column, {sortDirection: column.sortDirection === 'desc' ? 'asc' : 'desc'}
-                            )
-                            : column
+            defaultColumns: prevState.defaultColumns
+                .map(function (each) {
+                    if (columnName === each.name) {
+                        if (each.sortDirection === 'desc') {
+                            return {...each, sortDirection: 'asc'}
+                        } else {
+                            return {...each, sortDirection: 'desc'}
+                        }
+                    } else {
+                        return {...each, sortDirection: false}
                     }
-                )
-            })
-        );
-        console.log(this.state.defaultColumns)
+                })
+        }))
     }
 
-    render() {
-        if (!this.state.isLoaded) {
+        render()
+        {
+            if (!this.state.isLoaded) {
+                return (
+                    <div></div>
+                )
+            }
             return (
-                <div></div>
-            )
-        }
-        return (
-            <div>
-                {this.state.showSuccess === true ?
-                    <div className="float-end w-50 alert alert-success d-flex justify-content-between">
-                        <div>Success</div>
-                        <div className="icon-close-success" onClick={this.handleHideSuccess}>x</div>
-                    </div>
-                    : ''
-                }
-                <h2>Welcome {this.state.userName.toUpperCase()} !</h2>
-                <h2>Chuck Norris Mailer</h2>
-                <InputEmail
-                    onFetch={this.handleFetch}
-                    onShowSuccess={this.handleOnShowSuccess}
-                />
-                <div className="mt-5 card">
-                    <div className="card-body">
-                        <table className="table">
-                            <thead>
-                            <tr>
+                <div>
+                    {this.state.showSuccess === true ?
+                        <div className="float-end w-50 alert alert-success d-flex justify-content-between">
+                            <div>Success</div>
+                            <div className="icon-close-success" onClick={this.handleHideSuccess}>x</div>
+                        </div>
+                        : ''
+                    }
+                    <h2>Welcome {this.state.userName.toUpperCase()} !</h2>
+                    <h2>Chuck Norris Mailer</h2>
+                    <InputEmail
+                        onFetch={this.handleFetch}
+                        onShowSuccess={this.handleOnShowSuccess}
+                    />
+                    <div className="mt-5 card">
+                        <div className="card-body">
+                            <table className="table">
+                                <thead>
+                                <tr>
+                                    {
+                                        this.state.defaultColumns.map((column) => (
+                                            <TableHeader
+                                                key={column.name}
+                                                value={column.name}
+                                                sortDirection={column.sortDirection}
+                                                onHeaderClick={this.handleSortDesc}
+                                            />
+                                        ))
+                                    }
+                                </tr>
+                                </thead>
+                                <tbody>
                                 {
-                                    this.state.defaultColumns.map((column) => (
-                                        <TableHeader
-                                            key={column.name}
-                                            value={column.name}
-                                            sortDirection={column.sortDirection}
-                                            onHeaderClick={this.handleSortDesc}
-                                        />
-                                    ))
-                                }
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {
-                                this.state.emails.data.map((email) => {
-                                    return <tr key={email.id}>
-                                        <td>{email.id}</td>
-                                        <td>{email.value}</td>
-                                        <td>{email.name}</td>
-                                        <td>{email.domain}</td>
-                                        <td>
-                                            <button onClick={() => this.handleSend(email.id)}
-                                                    className="btn btn-secondary">
-                                                Send
-                                            </button>
-                                        </td>
-                                    </tr>
+                                    this.state.emails.data.map((email) => {
+                                        return <tr key={email.id}>
+                                            <td>{email.id}</td>
+                                            <td>{email.value}</td>
+                                            <td>{email.name}</td>
+                                            <td>{email.domain}</td>
+                                            <td>
+                                                <button onClick={() => this.handleSend(email.id)}
+                                                        className="btn btn-secondary">
+                                                    Send
+                                                </button>
+                                            </td>
+                                        </tr>
 
-                                })
-                            }
-                            </tbody>
-                        </table>
+                                    })
+                                }
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
-        );
+            );
+        }
     }
-}
 
-export default Emails;
+    export
+    default
+    Emails;

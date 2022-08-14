@@ -40,9 +40,9 @@ class InputEmail extends Component {
                 email: ''
             })
             this.handleOnShowSuccess()
+            this.handleFetch()
         } catch (e) {
             console.log(e)
-            this.handleShowSuccess()
             this.setState({errors: e.response.data.errors.email[0]});
             this.setState({
                 errors: {
