@@ -62,7 +62,15 @@ class Emails extends Component {
                 this.setState({emails: response.data})
                 console.log(this.state.emails)
             })
+        } else {
+            window.location = '/'
         }
+    }
+
+    handleLogOut = () => {
+        localStorage.removeItem('user_token');
+        localStorage.removeItem('user_name');
+        window.location = '/'
     }
 
     handleSend = (id) => {
@@ -121,8 +129,14 @@ class Emails extends Component {
                         </div>
                         : ''
                     }
-                    <h2>Welcome {this.state.userName.toUpperCase()} !</h2>
-                    <h2>This is the Chuck Norris Mailer</h2>
+                    <div className="d-flex justify-content-between">
+                        <h2>Welcome {this.state.userName.toUpperCase()} !</h2>
+                        <h2>This is the Chuck Norris Mailer</h2>
+                        <div className="">
+                            <button onClick={this.handleLogOut} className="btn btn-primary">Log Out</button>
+                        </div>
+                    </div>
+
                     <InputEmail
                         onFetch={this.handleFetch}
                         onShowSuccess={this.handleOnShowSuccess}

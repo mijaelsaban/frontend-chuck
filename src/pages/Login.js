@@ -12,6 +12,13 @@ class Login extends Component
       password: ''
     };
 
+    componentDidMount() {
+        const token = localStorage.getItem("user_token");
+        if (token) {
+            window.location = '/emails'
+        }
+    }
+
     handleInput = (e) => {
         this.setState({
                 [e.target.name]: e.target.value

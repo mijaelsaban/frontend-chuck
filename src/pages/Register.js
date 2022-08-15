@@ -1,9 +1,9 @@
 import React, { Component, useState } from "react";
 import logo from './../logo.svg';
 import axios from 'axios'
+import {Link} from "react-router-dom";
 
-
-class Login extends Component
+class Register extends Component
 {
     state = {
         name: '',
@@ -77,6 +77,10 @@ class Login extends Component
                         </div>
                     </div>
 
+                    <div className="text-center">
+                        <p>Are you a member? <Link to={"/"}>Login</Link></p>
+                    </div>
+
                     <button type="submit" className="btn btn-primary btn-block mb-4">Register</button>
                 </form>
             </div>
@@ -84,4 +88,4 @@ class Login extends Component
     }
 }
 
-export default Login
+export default Register
