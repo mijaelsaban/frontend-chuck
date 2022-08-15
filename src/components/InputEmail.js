@@ -43,12 +43,8 @@ class InputEmail extends Component {
             this.handleFetch()
         } catch (e) {
             console.log(e)
-            this.setState({errors: e.response.data.errors.email[0]});
-            this.setState({
-                errors: {
-                    email: e.response.data.errors.email[0]
-                }
-            })
+            // this.setState({errors: e.response.data.errors.email[0]});
+            this.setState({errors: {email: e.response.data.errors.email[0]}})
         }
     }
 

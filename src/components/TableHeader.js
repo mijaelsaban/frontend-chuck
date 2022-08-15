@@ -5,10 +5,6 @@ class TableHeader extends Component {
         super(props);
     }
 
-    componentDidMount() {
-        console.log('th', this.props)
-    }
-
     onHeaderClick = () => {
         this.props.onHeaderClick(this.props.value, this.props.sortDirection);
     }

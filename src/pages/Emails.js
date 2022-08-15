@@ -60,7 +60,6 @@ class Emails extends Component {
             ).then(response => {
                 this.setState({isLoaded: true})
                 this.setState({emails: response.data})
-                console.log(this.state.emails)
             })
         } else {
             window.location = '/'

@@ -9,7 +9,10 @@ class Login extends Component
 {
     state = {
       email: '',
-      password: ''
+      password: '',
+      errors: {
+          email: '',
+      },
     };
 
     componentDidMount() {
@@ -35,11 +38,11 @@ class Login extends Component
                     if (status === 200) {
                         localStorage.setItem('user_token', response.data.token)
                         localStorage.setItem('user_name', response.data.user.name)
-                        console.log(response.data)
                         window.location = '/emails'
                     }
                 });
         } catch (e) {
+            this.setState({errors: {email: e.response.data.errors.email[0]}})
             console.log(e)
             if (e.code === "ERR_NETWORK") {
                 alert('Error. Please Check your internet connection.')
@@ -60,13 +63,26 @@ class Login extends Component
                 </div>
                 <form onSubmit={this.handleLogin}>
                     <div className="form-outline mb-4">
-                        <input onChange={this.handleInput} name='email' value={this.state.email} type="email" id="form2Example1" className="form-control"/>
+                        <input onChange={this.handleInput}
+                               name='email'
+                               value={this.state.email}
+                               type="email" id="form2Example1"
+                               className={"form-control " + (this.state.errors.email.length > 1 ? "border border-danger" : '') }/>
                         <label className="form-label" htmlFor="form2Example1">Email address</label>
                     </div>
 
                     <div className="form-outline mb-4">
-                        <input onChange={this.handleInput} name='password' value={this.state.password} type="password" id="form2Example2" className="form-control"/>
+                        <input onChange={this.handleInput}
+                               name='password'
+                               value={this.state.password}
+                               type="password"
+                               id="form2Example2"
+                               className={"form-control " + (this.state.errors.email.length > 1 ? "border border-danger" : '') }/>
                         <label className="form-label" htmlFor="form2Example2">Password</label>
+                    </div>
+
+                    <div className="form-outline mb-4">
+                        <label className="form-label text-danger" htmlFor="form2Example2">{ this.state.errors.email }</label>
                     </div>
 
                     <div className="row mb-4">

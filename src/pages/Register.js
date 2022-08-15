@@ -28,7 +28,6 @@ class Register extends Component
                     if (status === 200) {
                         localStorage.setItem('user_token', response.data.token)
                         localStorage.setItem('user_name', response.data.user.name)
-                        console.log(response.data)
                         window.location = '/emails'
                     }
                 });
