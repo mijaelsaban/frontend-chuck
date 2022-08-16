@@ -29,6 +29,7 @@ class Emails extends Component {
             next_page_url: '',
             per_page: 0,
             total: 0,
+            currentSort:''
         }
     }
 
@@ -55,15 +56,20 @@ class Emails extends Component {
         this.setState({showSuccess: false})
     }
 
-    handleFetch = (queryString= '', pageNumber = 1) => {
+    handleFetch = (pageNumber = 'page=1') => {
         console.log('fetching data')
         const token = localStorage.getItem("user_token");
         if (token) {
             const config = {
                 headers: {Authorization: `Bearer ${token}`}
             }
+            console.log(this.state.currentSort)
             axios.get(
-                process.env.REACT_APP_BACKEND_BASE_URL + '/api/emails?page=' + pageNumber  + '&' + queryString,
+                process.env.REACT_APP_BACKEND_BASE_URL +
+                '/api/emails?' +
+                pageNumber  +
+                '&' +
+                this.state.currentSort,
                 config
             ).then(response => {
                 this.setState({isLoaded: true})
@@ -83,7 +89,6 @@ class Emails extends Component {
     }
 
     handleSend = (id) => {
-        console.log(id)
         console.log('sending email')
         const token = localStorage.getItem("user_token");
         if (token) {
@@ -100,16 +105,19 @@ class Emails extends Component {
         }
     }
 
-    handleSortDesc = (columnName) => {
+    handleSortDesc = (columnName, pageNumber = 1) => {
+        console.log(columnName, pageNumber);
         this.setState(prevState => ({
             defaultColumns: prevState.defaultColumns
                 .map((each) => {
                     if (columnName === each.name) {
                         if (each.sortDirection === 'desc') {
-                            this.handleFetch('sort[' + columnName + ']=asc')
+                            this.handleFetch('sort[' + columnName + ']=desc')
+                            this.setState({currentSort: 'sort[' + columnName + ']=desc'})
                             return {...each, sortDirection: 'asc'}
                         } else {
-                            this.handleFetch('sort[' + columnName + ']=desc')
+                            this.handleFetch('sort[' + columnName + ']=asc')
+                            this.setState({currentSort: 'sort[' + columnName + ']=asc'})
                             return {...each, sortDirection: 'desc'}
                         }
                     } else {
@@ -190,7 +198,7 @@ class Emails extends Component {
                             <div>
                                 <Pagination
                                     links={ this.state.links }
-                                    onFetch={ () => this.handleFetch()}
+                                    onFetch={ (page) => this.handleFetch(page) }
                                 />
                             </div>
                         </div>

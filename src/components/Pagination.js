@@ -13,7 +13,8 @@ class Pagination extends Component {
     }
 
     handlePagination = (url) => {
-        this.props.onfetch(url);
+        const pageNumber = url.split('?')
+        this.props.onFetch(pageNumber[1]);
     }
 
     render() {
