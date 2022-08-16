@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import axios from "axios"
 import InputEmail from "../components/InputEmail";
 import TableHeader from "../components/TableHeader";
-
+import Pagination from "../components/Pagination";
 
 class Emails extends Component {
     constructor(props) {
@@ -20,7 +20,15 @@ class Emails extends Component {
                 {name: 'name', sortDirection: 'desc'},
                 {name: 'domain', sortDirection: false},
                 {name: 'action', sortDirection: false}
-            ]
+            ],
+            current_page: '',
+            first_page_url: '',
+            last_page: '',
+            last_page_url: '',
+            links: [],
+            next_page_url: '',
+            per_page: 0,
+            total: 0,
         }
     }
 
@@ -47,7 +55,7 @@ class Emails extends Component {
         this.setState({showSuccess: false})
     }
 
-    handleFetch = (queryString='') => {
+    handleFetch = (queryString= '', pageNumber = 1) => {
         console.log('fetching data')
         const token = localStorage.getItem("user_token");
         if (token) {
@@ -55,11 +63,13 @@ class Emails extends Component {
                 headers: {Authorization: `Bearer ${token}`}
             }
             axios.get(
-                process.env.REACT_APP_BACKEND_BASE_URL + '/api/emails?' + queryString,
+                process.env.REACT_APP_BACKEND_BASE_URL + '/api/emails?page=' + pageNumber  + '&' + queryString,
                 config
             ).then(response => {
                 this.setState({isLoaded: true})
                 this.setState({emails: response.data})
+                this.setState({links: response.data.links})
+                // console.log(response.data)
             })
         } else {
             window.location = '/'
@@ -177,6 +187,12 @@ class Emails extends Component {
                                 }
                                 </tbody>
                             </table>
+                            <div>
+                                <Pagination
+                                    links={ this.state.links }
+                                    onFetch={ () => this.handleFetch()}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -184,6 +200,4 @@ class Emails extends Component {
         }
     }
 
-    export
-    default
-    Emails;
+    export default Emails;
