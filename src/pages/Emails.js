@@ -112,12 +112,12 @@ class Emails extends Component {
                 .map((each) => {
                     if (columnName === each.name) {
                         if (each.sortDirection === 'desc') {
+                            // this.setState(prevState => ({currentSort: 'sort[' + columnName + ']=desc'}))
                             this.handleFetch('sort[' + columnName + ']=desc')
-                            this.setState({currentSort: 'sort[' + columnName + ']=desc'})
                             return {...each, sortDirection: 'asc'}
                         } else {
+                            // this.setState(prevState => ({currentSort: 'sort[' + columnName + ']=desc'}))
                             this.handleFetch('sort[' + columnName + ']=asc')
-                            this.setState({currentSort: 'sort[' + columnName + ']=asc'})
                             return {...each, sortDirection: 'desc'}
                         }
                     } else {
@@ -125,6 +125,7 @@ class Emails extends Component {
                     }
                 })
         }))
+        console.log(this.state.defaultColumns)
     }
 
         render()
