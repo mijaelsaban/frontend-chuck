@@ -7,11 +7,6 @@ class Pagination extends Component {
         super(props);
     }
 
-    componentDidMount() {
-        console.log(this.props)
-        console.log((this.props.links[0].url && this.props.links[0].url.length > 0))
-    }
-
     handlePagination = (url) => {
         const pageNumber = url.split('?')
         this.props.onFetch(pageNumber[1]);

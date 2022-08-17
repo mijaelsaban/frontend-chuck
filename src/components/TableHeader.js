@@ -6,7 +6,7 @@ class TableHeader extends Component {
     }
 
     onHeaderClick = () => {
-        this.props.onHeaderClick(this.props.value, this.props.sortDirection);
+        this.props.onHeaderClick(this.props.value);
     }
 
     render() {
@@ -15,9 +15,10 @@ class TableHeader extends Component {
                 {this.props.value}
                     <span className="icons-ml">
                         {
-                            this.props.sortDirection === false ? '' :
-                            this.props.sortDirection === 'desc' ? <i className="bi-chevron-down"></i>
-                                : <i className="bi-chevron-up"></i>
+                            (this.props.sortDirection === false ? '' :
+                                (this.props.sortDirection === 'asc') ?
+                                <i className="bi-chevron-down"></i>
+                                : <i className="bi-chevron-up"></i>)
                         }
 
                     </span>

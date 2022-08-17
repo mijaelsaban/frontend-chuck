@@ -3,6 +3,7 @@ import axios from "axios"
 import InputEmail from "../components/InputEmail";
 import TableHeader from "../components/TableHeader";
 import Pagination from "../components/Pagination";
+import {Link} from "react-router-dom";
 
 class Emails extends Component {
     constructor(props) {
@@ -29,7 +30,7 @@ class Emails extends Component {
             next_page_url: '',
             per_page: 0,
             total: 0,
-            currentSort:''
+            current_sort: ''
         }
     }
 
@@ -56,6 +57,19 @@ class Emails extends Component {
         this.setState({showSuccess: false})
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevState.defaultColumns !== this.state.defaultColumns) {
+            this.state.defaultColumns.map((each) => {
+                if (each.sortDirection) {
+                    this.setState({current_sort: 'sort[' + each.name + ']=' + each.sortDirection});
+                }
+            })
+
+
+        }
+
+    }
+
     handleFetch = (pageNumber = 'page=1') => {
         console.log('fetching data')
         const token = localStorage.getItem("user_token");
@@ -63,13 +77,13 @@ class Emails extends Component {
             const config = {
                 headers: {Authorization: `Bearer ${token}`}
             }
-            console.log(this.state.currentSort)
+            console.log('CURRENT SORT:', this.state.current_sort)
             axios.get(
                 process.env.REACT_APP_BACKEND_BASE_URL +
                 '/api/emails?' +
                 pageNumber  +
                 '&' +
-                this.state.currentSort,
+                this.state.current_sort,
                 config
             ).then(response => {
                 this.setState({isLoaded: true})
@@ -105,27 +119,26 @@ class Emails extends Component {
         }
     }
 
-    handleSortDesc = (columnName, pageNumber = 1) => {
-        console.log(columnName, pageNumber);
+    handleSortDesc = (columnName) => {
+        console.log('handle sorting')
         this.setState(prevState => ({
             defaultColumns: prevState.defaultColumns
                 .map((each) => {
                     if (columnName === each.name) {
-                        if (each.sortDirection === 'desc') {
-                            // this.setState(prevState => ({currentSort: 'sort[' + columnName + ']=desc'}))
-                            this.handleFetch('sort[' + columnName + ']=desc')
-                            return {...each, sortDirection: 'asc'}
-                        } else {
-                            // this.setState(prevState => ({currentSort: 'sort[' + columnName + ']=desc'}))
+                        console.log(each.sortDirection)
+                        if (each.sortDirection === 'asc') {
                             this.handleFetch('sort[' + columnName + ']=asc')
                             return {...each, sortDirection: 'desc'}
+                        } else {
+                            // this.setState(prevState => ({current_sort: 'sort[' + columnName + ']=desc'}))
+                            this.handleFetch('sort[' + columnName + ']=desc')
+                            return {...each, sortDirection: 'asc'}
                         }
                     } else {
                         return {...each, sortDirection: false}
                     }
                 })
-        }))
-        console.log(this.state.defaultColumns)
+        }));
     }
 
         render()
@@ -180,7 +193,16 @@ class Emails extends Component {
                                 {
                                     this.state.emails.data.map((email) => {
                                         return <tr key={email.id}>
-                                            <td>{email.id}</td>
+                                            <td>
+                                                {
+                                                    email.messages.length > 0 ?
+                                                <Link to={"/emails/" + email.id + "/messages"}
+                                                      params={{ messages: email }}>
+                                                    {email.id}
+                                                </Link>
+                                                        : email.id
+                                                }
+                                            </td>
                                             <td>{email.value}</td>
                                             <td>{email.name}</td>
                                             <td>{email.domain}</td>
