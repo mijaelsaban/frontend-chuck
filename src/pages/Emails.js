@@ -18,9 +18,9 @@ class Emails extends Component {
             defaultColumns: [
                 {name: 'id', sortDirection: false},
                 {name: 'value', sortDirection: false},
-                {name: 'name', sortDirection: 'desc'},
+                {name: 'name', sortDirection: false},
                 {name: 'domain', sortDirection: false},
-                {name: 'action', sortDirection: false}
+                {name: 'action', sortDirection: 'desc'}
             ],
             current_page: '',
             first_page_url: '',
@@ -77,7 +77,6 @@ class Emails extends Component {
             const config = {
                 headers: {Authorization: `Bearer ${token}`}
             }
-            console.log('CURRENT SORT:', this.state.current_sort)
             axios.get(
                 process.env.REACT_APP_BACKEND_BASE_URL +
                 '/api/emails?' +
@@ -125,7 +124,6 @@ class Emails extends Component {
             defaultColumns: prevState.defaultColumns
                 .map((each) => {
                     if (columnName === each.name) {
-                        console.log(each.sortDirection)
                         if (each.sortDirection === 'asc') {
                             this.handleFetch('sort[' + columnName + ']=asc')
                             return {...each, sortDirection: 'desc'}
@@ -145,7 +143,7 @@ class Emails extends Component {
         {
             if (!this.state.isLoaded) {
                 return (
-                    <div></div>
+                    <div>Loading...</div>
                 )
             }
             return (
@@ -174,6 +172,10 @@ class Emails extends Component {
                     />
                     <div className="mt-5 card">
                         <div className="card-body overflow-auto">
+                            <div className={"card-title"}>
+                                <p>Press the button Send to send an email with a random joke.</p>
+                                <p>You can see the sent emails by clicking on the ids. Enjoy!</p>
+                            </div>
                             <table className="table">
                                 <thead>
                                 <tr>
